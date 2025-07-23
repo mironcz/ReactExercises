@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   const [input, setInput] = useState("");
 
-  const handleClick = (value) => {
+  const handleBtnClick = (value) => {
     setInput((prev) => prev + value);
   };
 
@@ -12,7 +12,7 @@ function App() {
     setInput("");
   };
 
-  const handleEquals = () => {
+  const handleCalculate = () => {
     try {
       setInput(eval(input).toString());
     } catch (error) {
@@ -30,8 +30,8 @@ function App() {
             key={btn}
             onClick={
               btn === "="
-                ? handleEquals
-                : () => handleClick(btn)
+                ? handleCalculate
+                : () => handleBtnClick(btn)
             }
           >
             {btn}
