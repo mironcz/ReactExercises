@@ -5,11 +5,12 @@ function App() {
 
   const [targetNumber, setTargetNumber] = useState(generateRandomNumber());
   const [guess, setGuess] = useState('');
-  const [message, setMessage] = useState('Угадай число от 1 до 100');
+  const [message, setMessage] = useState('Угадай число от 0 до 10');
   const [attempts, setAttempts] = useState(0);
+  const [attemptsUsed, setUsedAttempts] = useState(3);
 
   function generateRandomNumber() {
-    return Math.floor(Math.random() * 100) + 1;
+    return Math.floor(Math.random() * 10);
   }
 
   const handleGuess = () => {
@@ -21,6 +22,7 @@ function App() {
     }
 
     setAttempts(attempts + 1);
+    setUsedAttempts(attemptsUsed - 1);
 
     if (numberGuess === targetNumber) {
       setMessage(`Поздравляем! Вы угадали число за ${attempts + 1} попыток!`);
@@ -36,12 +38,14 @@ function App() {
     setGuess('');
     setMessage('Угадай число от 1 до 100');
     setAttempts(0);
+    setUsedAttempts(3);
   };
 
   return (
     <div className="App">
       <h1>Угадай число</h1>
       <p>{message}</p>
+      <p>У вас осталось {attemptsUsed} попыток!</p>
 
       <input
         type="number"
