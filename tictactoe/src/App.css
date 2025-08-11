@@ -60,13 +60,24 @@
   height: 100px;
   font-size: 36px;
   cursor: pointer;
+  color: rgb(169, 24, 24);
   background-color: #f0f0f0;
-  border: 2px solid #333;
+  border: 2px solid #cc1010;
+  transition: background-color 0.3s;
+}
+.square1 {
+  width: 100px;
+  height: 100px;
+  font-size: 36px;
+  cursor: pointer;
+  color: #3109f8;
+  background-color: #f0f0f0;
+  border: 2px solid #cc1010;
   transition: background-color 0.3s;
 }
 
 .square:hover {
-  background-color: #ddd;
+  background-color: #ffffff;
 }
 
 .reset-button {

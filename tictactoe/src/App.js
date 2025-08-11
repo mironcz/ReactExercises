@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function Square({ value, onClick }) {
@@ -17,13 +17,27 @@ function App() {
   const isDraw = squares.every(Boolean) && !winner;
 
   const handleClick = (index) => {
-    if (squares[index] || winner) return;
+    if (squares[index] || winner || !xIsNext) return; 
 
     const nextSquares = squares.slice();
-    nextSquares[index] = xIsNext ? 'X' : 'O';
+    nextSquares[index] = 'X';
     setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    setXIsNext(false);
   };
+
+  useEffect(() => {
+    if (!xIsNext && !winner && !isDraw) {
+      const botMove = getBotMove(squares);
+      if (botMove !== null) {
+        const nextSquares = squares.slice();
+        nextSquares[botMove] = 'O';
+        setTimeout(() => {
+          setSquares(nextSquares);
+          setXIsNext(true);
+        }, 500);
+      }
+    }
+  }, [xIsNext, squares, winner, isDraw]);
 
   const handleReset = () => {
     setSquares(Array(9).fill(null));
@@ -32,11 +46,11 @@ function App() {
 
   let status;
   if (winner) {
-    status = `winer: ${winner}`;
+    status = `Winner: ${winner}`;
   } else if (isDraw) {
     status = 'Draw!';
   } else {
-    status = `next: ${xIsNext ? 'X' : 'O'}`;
+    status = `Next: ${xIsNext ? 'X (You)' : 'O (Bot)'}`;
   }
 
   return (
@@ -68,6 +82,15 @@ function calculateWinner(sq) {
     }
   }
   return null;
+}
+
+function getBotMove(squares) {
+  const emptyIndices = squares
+    .map((val, idx) => (val === null ? idx : null))
+    .filter((val) => val !== null);
+  
+  if (emptyIndices.length === 0) return null;
+  return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
 }
 
 export default App;
