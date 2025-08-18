@@ -13,7 +13,7 @@ export default function SnakeGame() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "w" && direction !== "DOWN") setDirection("UP");
-      if (e.key === "s" && direction !== "UP") setDirection("DOWN");
+      if (e.key === "s" && direction !== "UP") setDirection("DOWN"); 
       if (e.key === "a" && direction !== "RIGHT") setDirection("LEFT");
       if (e.key === "d" && direction !== "LEFT") setDirection("RIGHT");
     };
@@ -35,7 +35,8 @@ export default function SnakeGame() {
     if (direction === "RIGHT") head.x += 1;
 
     if (head.x < 0 || head.y < 0 || head.x >= GRID_SIZE || head.y >= GRID_SIZE) {
-      setGameOver(true);
+      setSnake([{ x: 8, y: 8}]);
+      setDirection("RIGHT")
       return;
     }
 
@@ -63,15 +64,17 @@ export default function SnakeGame() {
   }
 
   return (
+    
     <div>
       <h1>Змейка</h1>
-      {gameOver && <h2>Игра окончена!</h2>}
+  
       <div
         style={{
+          textAlign: 'center',
           display: "grid",
           gridTemplateColumns: `repeat(${GRID_SIZE}, 20px)`,
           border: "2px solid black",
-          background: "#eee",
+          background: "rgba(7, 244, 46, 1)",
           width: GRID_SIZE * 20,
           height: GRID_SIZE * 20,
         }}
@@ -85,6 +88,7 @@ export default function SnakeGame() {
             <div
               key={index}
               style={{
+                textAlign: 'center',
                 width: 20,
                 height: 20,
                 background: isSnake ? "blue" : isFood ? "red" : "",
@@ -93,6 +97,7 @@ export default function SnakeGame() {
           );
         })}
       </div>
+       {gameOver && <h2>Игра окончена!</h2>}
     </div>
   );
 }
