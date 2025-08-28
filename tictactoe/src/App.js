@@ -2,11 +2,25 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function Square({ value, onClick }) {
-  return (
-    <button className="square" onClick={onClick}>
-      {value}
-    </button>
-  );
+  if (value === 'O') {
+    return (
+      <button className="circle" onClick={onClick}>
+        {value}
+      </button>
+    );
+  } else if (value === 'X') {
+    return (
+      <button className="cross" onClick={onClick}>
+        {value}
+      </button>
+    );
+  } else {
+    return (
+      <button className="empty" onClick={onClick}>
+        {value}
+      </button>
+    );
+  }
 }
 
 function App() {
