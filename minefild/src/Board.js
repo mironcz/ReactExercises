@@ -1,5 +1,75 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Cell from './Cell';
+
+export default function Board({ rows, cols, mines }) {
+  const [board, setBoard] = useState(() => generateBoard(rows, cols, mines));
+  const [gameOver, setGameOver] = useState(false);
+
+  function openCell(r, c) {
+    if (gameOver || board[r][c].isOpen || board[r][c].isFlagged) return;
+
+    const newBoard = board.map(row => row.map(cell => ({ ...cell })));
+
+    function openCellRecursive(x, y) {
+      const cell = newBoard[x][y];
+      
+      if (cell.isOpen || cell.isFlagged) return;
+
+      cell.isOpen = true;
+
+      if (cell.adjacentMines === 0 && !cell.isMine) {
+        for (let dr of [-1, 0, 1]) {
+          for (let dc of [-1, 0, 1]) {
+            const nx = x + dr;
+            const ny = y + dc;
+            if (nx >= 0 &&
+               nx < rows &&
+               ny >= 0 &&
+               ny < cols &&
+              !(dr === 0 && dc === 0)) {
+                openCellRecursive(nx, ny);
+            }
+          }
+        }
+      }
+    }
+
+    if (newBoard[r][c].isMine) {
+      alert('💥 Игра окончена!');
+      setGameOver(true);
+      newBoard[r][c].isOpen = true;
+    } else {
+      openCellRecursive(r, c);
+    }
+
+    setBoard(newBoard);
+  }
+
+  function toggleFlag(r, c, e) {
+    e.preventDefault();
+    if (gameOver || board[r][c].isOpen) return;
+    const newBoard = board.map(row => row.map(cell => ({ ...cell })));
+    newBoard[r][c].isFlagged = !newBoard[r][c].isFlagged;
+    setBoard(newBoard);
+  }
+
+  return (
+    <div style={{ display: 'inline-block' }}>
+      {board.map((row, r) => (
+        <div key={r} style={{ display: 'flex' }}>
+          {row.map((cell, c) => (
+            <Cell
+              key={`${r}-${c}`}
+              data={cell}
+              onClick={() => openCell(r, c)}
+              onRightClick={(e) => toggleFlag(r, c, e)}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function generateBoard(rows, cols, mines) {
   const board = Array.from({ length: rows }, () =>
@@ -46,74 +116,4 @@ function generateBoard(rows, cols, mines) {
   }
 
   return board;
-}
-
-export default function Board({ rows, cols, mines }) {
-  const [board, setBoard] = useState(() => generateBoard(rows, cols, mines));
-  const [gameOver, setGameOver] = useState(false);
-
-  function openCell(r, c) {
-    if (gameOver || board[r][c].isOpen || board[r][c].isFlagged) return;
-
-    const newBoard = board.map(row => row.map(cell => ({ ...cell })));
-
-    function dfs(x, y) {
-      const cell = newBoard[x][y];
-      if (cell.isOpen || cell.isFlagged) return;
-      cell.isOpen = true;
-
-      if (cell.adjacentMines === 0 && !cell.isMine) {
-        for (let dr of [-1, 0, 1]) {
-          for (let dc of [-1, 0, 1]) {
-            const nx = x + dr;
-            const ny = y + dc;
-            if (
-              nx >= 0 &&
-              nx < rows &&
-              ny >= 0 &&
-              ny < cols &&
-              !(dr === 0 && dc === 0)
-            ) {
-              dfs(nx, ny);
-            }
-          }
-        }
-      }
-    }
-
-    if (newBoard[r][c].isMine) {
-      alert('💥 Игра окончена!');
-      setGameOver(true);
-      newBoard[r][c].isOpen = true;
-    } else {
-      dfs(r, c);
-    }
-
-    setBoard(newBoard);
-  }
-
-  function toggleFlag(r, c, e) {
-    e.preventDefault();
-    if (gameOver || board[r][c].isOpen) return;
-    const newBoard = board.map(row => row.map(cell => ({ ...cell })));
-    newBoard[r][c].isFlagged = !newBoard[r][c].isFlagged;
-    setBoard(newBoard);
-  }
-
-  return (
-    <div style={{ display: 'inline-block' }}>
-      {board.map((row, r) => (
-        <div key={r} style={{ display: 'flex' }}>
-          {row.map((cell, c) => (
-            <Cell
-              key={`${r}-${c}`}
-              data={cell}
-              onClick={() => openCell(r, c)}
-              onRightClick={(e) => toggleFlag(r, c, e)}
-            />
-          ))}
-        </div>
-      ))}
-    </div>
-  );
 }
