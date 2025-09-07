@@ -1,7 +1,10 @@
 import React, { useState, useCallback, useRef } from "react";
+import './App.css';
+// todo: use css in return div && code -> functions - 1. try failed
 
 const numRows = 25;
 const numCols = 25;
+const timeDelay = 150
 
 const operations = [
   [0, 1], [0, -1],
@@ -49,11 +52,11 @@ export default function App() {
       );
     });
 
-    setTimeout(runSimulation, 200);
+    setTimeout(runSimulation, timeDelay);
   }, []);
 
   return (
-    <>
+    <div>
       <button
         onClick={() => {
           setRunning(!running);
@@ -111,6 +114,6 @@ export default function App() {
           ))
         )}
       </div>
-    </>
+    </div>
   );
 }
