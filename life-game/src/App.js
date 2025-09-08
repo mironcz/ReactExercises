@@ -55,34 +55,47 @@ export default function App() {
     setTimeout(runSimulation, timeDelay);
   }, []);
 
+    const handleStartPause = () => {
+    setRunning(!running);
+    if (!running) {
+      runningRef.current = true;
+      runSimulation();
+    }
+  };
+
+  const handleClear = () => {
+    setGrid(generateEmptyGrid());
+  };
+
+  const handleRandom = () => {
+    const rows = Array.from({ length: numRows }, () =>
+      Array.from({ length: numCols }, () =>
+        Math.random() > 0.7 ? 1 : 0
+      )
+    );
+    setGrid(rows);
+  };
+
+  const handleCellClick = (i, j) => {
+    const newGrid = grid.map((row, r) =>
+      row.map((cell, c) =>
+        r === i && c === j ? (cell ? 0 : 1) : cell
+      )
+    );
+    setGrid(newGrid);
+  };
+
   return (
     <div>
-      <button
-        onClick={() => {
-          setRunning(!running);
-          if (!running) {
-            runningRef.current = true;
-            runSimulation();
-          }
-        }}
-      >
+      <button onClick={handleStartPause}>
         {running ? "Пауза" : "Старт"}
       </button>
 
-      <button onClick={() => setGrid(generateEmptyGrid())}>
+      <button onClick={handleClear}>
         Очистить
       </button>
 
-      <button
-        onClick={() => {
-          const rows = Array.from({ length: numRows }, () =>
-            Array.from({ length: numCols }, () =>
-              Math.random() > 0.7 ? 1 : 0
-            )
-          );
-          setGrid(rows);
-        }}
-      >
+      <button onClick={handleRandom}>
         Случайно
       </button>
 
