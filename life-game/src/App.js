@@ -75,7 +75,7 @@ export default function App() {
     );
     setGrid(rows);
   };
-
+// faild to impement
   const handleCellClick = (i, j) => {
     const newGrid = grid.map((row, r) =>
       row.map((cell, c) =>
