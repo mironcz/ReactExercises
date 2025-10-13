@@ -12,26 +12,40 @@ function App() {
   const getAuthorsUrl = "http://localhost:8080/api/author";
   const [authors, setAuthors] = useState([]);
   // книги автора
+  const getBookByAuthorId = "http://localhost:8080/api/book/by_author/";
   const [books, setBooks] = useState([]);
-  const getBookByAuthorIdUrl = "http://localhost:8080/api/book/author/";
+  const getBookById = "http://localhost:8080/api/book/";
 
-   // чтение авторов
-   function getAuthors() {
+  // чтение авторов
+  function getAuthors() {
     fetch(getAuthorsUrl)
       .then(response => response.json())
-      .then(result => setAuthors(result));
-
-      console.log(JSON.stringify(authors));
+      .then(result => {
+        setAuthors(result);
+        console.log("Загруженные авторы:", result);
+      })
   }
 
   // чтение книг
   function readBooks(event) {
-    const index = event.target.selectedIndex;
-    fetch(getBookByAuthorIdUrl + index)
+    const authorId = authors[event.target.selectedIndex].authorId;
+    fetch(getBookByAuthorId + authorId)
       .then(response => response.json())
-      .then(result => setBooks(result));
+      .then(result => {
+        setBooks(result);
+        console.log("Загруженные книги:", result);
+      })
+  }
 
-      console.log(JSON.stringify(books));
+  // чтение данных книги
+  function readBooksInfo(event) {
+    const book = books[event.target.selectedIndex];
+    setName(book.name);
+    setDescription(book.description);
+    setAuthor(book.author);
+    setYear(book.year);
+    setPublisher(book.publisher);
+    setISBN(book.ISBN);
   }
 
   return (
@@ -53,7 +67,7 @@ function App() {
             <button className="btn btn-primary m-2" onClick={getAuthors}>R</button>
             <button className="btn btn-secondary m-2">E</button>
             <button className="btn btn-success m-2">D</button>
-            <select class="form-select" onChange={readBooks} size="10" aria-label="Default select example">
+            <select className="form-select" onChange={readBooks} size="10" aria-label="Default select example">
               {authors.map((author) => (
                 <option key={author.authorId}>{author.name}</option>
               ))}
@@ -66,7 +80,7 @@ function App() {
             <button className="btn btn-primary m-2">C</button>
             <button className="btn btn-secondary m-2">E</button>
             <button className="btn btn-success m-2">D</button>
-            <select class="form-select" size="10" aria-label="size 3 select example">
+            <select className="form-select" onChange={readBooksInfo} size="10" aria-label="size 3 select example">
               {books.map((book) => (
                 <option key={book.bookId}>{book.name}</option>
               ))}
