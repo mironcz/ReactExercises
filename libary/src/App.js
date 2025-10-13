@@ -14,7 +14,6 @@ function App() {
   // книги автора
   const getBookByAuthorId = "http://localhost:8080/api/book/by_author/";
   const [books, setBooks] = useState([]);
-  const getBookById = "http://localhost:8080/api/book/";
 
   // чтение авторов
   function getAuthors() {
@@ -24,6 +23,12 @@ function App() {
         setAuthors(result);
         console.log("Загруженные авторы:", result);
       })
+  }
+
+  // редактирование автора
+  function editAuthor(event) {
+
+    console.log(event);
   }
 
   // чтение книг
@@ -65,7 +70,7 @@ function App() {
         <div className="w-50 border-end d-flex justify-content-left align-items-left">
           <div>
             <button className="btn btn-primary m-2" onClick={getAuthors}>R</button>
-            <button className="btn btn-secondary m-2">E</button>
+            <button className="btn btn-secondary m-2"onClick={editAuthor}>E</button>
             <button className="btn btn-success m-2">D</button>
             <select className="form-select" onChange={readBooks} size="10" aria-label="Default select example">
               {authors.map((author) => (
