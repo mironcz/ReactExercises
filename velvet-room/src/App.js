@@ -5,7 +5,7 @@ function App() {
   const [dialogPages, setDialogPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
-  const APIkay = "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"
+  const APIkay = ""
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([
     { role: "system", content: "This is a memory test, try to remember messenge  of user" },
